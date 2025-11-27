@@ -1,34 +1,58 @@
-# 前端插件集
+# GoWorld 商业项目骨架
 
-**浏览端 JS**
+面向 GoWorld 风格的游戏后端，提供一套可直接运行的模块化脚手架，方便与 [gforgame](https://github.com/free-city/gforgame/tree/main) 对比和快速迭代。
 
-- requirejs - JS模块化是构建复杂项目的第一步 中文学习文档奉上：RequireJS 中文网
-- ECharts - 好用，最关键的是支持的图表展示非常之多，强烈推荐
-- Swiper - 强大的 Slider 库 其实这类效果库非常多，但文档能那么专业的就很少鸟
-- [fullPage](http://alvarotrigo.com/fullPage/) - 非常好用的全屏滑动库，看 Demo 就明白
-- PhotoSwipe - 偶常用的 js 库 官网上有这么一句很关键、重要"no dependencies"
-- Vuejs - 
-- mixitup 一款基于 jQuery 的 排序/过滤 的JS库，最关键是有着美妙的动画效果
-- favico.js - 动态改变浏览器标签栏中的网站图标，非常好玩
-- highlightjs - 代码高亮库，支持非常多的语言
-- daterangepicker - 时间选择插件的不二选择，基于 Bootstrap 和 Moment.js
-- nodePPT - 前同事三水的大作，好用必须得支持:) 用 Markdown 写 PPT，还可以 HTML 混排，上手飞快
-- Sortable - 拖拽神器，用了就知道
-- toastr - 信息提示的库，推荐的原因是卖相好、功能强大 demo
-- peity.js - jQuery的图表插件，特别cute，感觉萌萌哒 将HTML转换成一个小的<svg>饼图、圆环图、折线图等等
-- emojify.js - 能够将emoji关键词转换为emoji图片的JS插件 可以快速的为你的网站提供emoji表情支持
-- Push.js - 基于 Notification API 实现的桌面效果的提示栏。浏览器支持情况不错，如http://caniuse.com/#search=Notification
-- Highcharts| |Highcharts 中文网，又是一个图表库 确实功能强大，但是觉得不好看... PS：官网就做的不好看，脏脏的赶脚
-- NProgress - 使页面加载时有更好的loading效果
-- Noticejs - 一个简单的通知库，木有依赖
-- onepage-scroll - 依赖 jQuery 的单页滚动库，和 fullPage 类似
-- videojs - 当下视频需求都用上<video>鸟 样式和交互统一的问题交给 videojs 搞定:)
-- clipboard - 仅 2KB 大小，搞定剪贴板功能，屌不屌~ 但是，Safari 不支持...
-- impress.js - 用来写 PPT 不错，偶也曾为其写过一篇impress.js 初体验
-- Cropper - 国人开发的图片裁剪库
+## 主要特性
+- **模块齐全**：account、player、bag、item、shop、mail、notice、chat、room、match、dao、redis、log 等核心能力。
+- **清晰依赖注入**：集中构造服务，方便替换 DAO/缓存实现或接入真实中间件。
+- **即开即用**：内置内存存储与示例数据，`go run ./cmd/server` 即可启动。
+- **可扩展性**：模块之间通过明确定义的 service 层交互，便于迁移到数据库、消息队列等生产设施。
 
+## 目录结构
+```
+.
+├── cmd/server          # 程序入口
+├── internal
+│   ├── config          # 配置默认值
+│   ├── dao             # 内存数据层（可替换为数据库）
+│   ├── log             # 日志封装
+│   ├── redis           # 内存缓存（模拟 Redis）
+│   ├── server          # 路由聚合
+│   └── modules         # 业务模块
+│       ├── account
+│       ├── bag
+│       ├── chat
+│       ├── item
+│       ├── mail
+│       ├── match
+│       ├── notice
+│       ├── player
+│       ├── room
+│       └── shop
+└── go.mod
+```
 
+## 快速开始
+```bash
+go run ./cmd/server
+```
 
-> 收集前端常用的插件，如果你有好的插件，请联系我，谢谢！
+可选接口示例：
+- `POST /api/account/register` 注册账号
+- `POST /api/account/login` 登录并获取 token
+- `GET  /api/player/:id` 查询角色
+- `GET  /api/bag/:playerID` 查询背包
+- `GET  /api/items/` 道具表
+- `GET  /api/shop/items` 商城列表
+- `GET  /api/mail/:playerID` 邮件与附件
+- `GET  /api/notice/` 公告
+- `POST /api/chat/` 发送聊天
+- `GET  /api/chat/` 获取聊天记录
+- `POST /api/room/create` 创建房间（麻将/斗地主等）
+- `GET  /api/room/` 房间列表
+- `POST /api/match/enqueue` 匹配示例
 
-
+## 对比 gforgame 时的参考点
+- **模块覆盖度**：本模板聚焦核心玩法前置功能，使用内存实现方便快速试用。
+- **可替换性**：DAO、Redis、日志的接口化设计方便在对比时替换为 gforgame 的实现，验证性能或工程风格。
+- **学习路径**：通过逐个模块替换，逐步迁移到生产级依赖，便于团队评估两套框架的上手成本。
